@@ -1,4 +1,4 @@
-from cards import Card
+from .cards import Card
 from socket import socket
 
 class Player(object):
