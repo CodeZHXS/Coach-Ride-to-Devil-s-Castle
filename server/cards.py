@@ -1,4 +1,6 @@
 from enum import Enum
+import random
+
 
 class CardTypes(Enum):
     """
@@ -8,12 +10,11 @@ class CardTypes(Enum):
 
     CAMP: 阵营牌
     HAND: 手牌
-    PROFESSION: 身份牌
+    PROFESSION: 职业牌
     """
     CAMP = 1 
     HAND = 2
     PROFESSION = 3
-
 
 class Card(object):
     def __init__(
@@ -33,9 +34,11 @@ class RedCamp(Card):
 
     红色阵营卡牌，当阵营中至少拥有三只高脚杯即可宣布胜利。
     '''
+    # desc = "红色阵营卡牌，当阵营中至少拥有三只高脚杯即可宣布胜利。"
+
     def __init__(self) -> None:
         desc = '红色阵营卡牌，当阵营中至少拥有三只高脚杯即可宣布胜利。'
-        super().__init__(0, CardTypes.CAMP, desc)
+        super().__init__(0, CardTypes.CAMP, self.desc)
     def __str__(self):
         return str(self.id) + ' ' + self.description
 
@@ -81,10 +84,10 @@ class GobletBag(Card):
     '''
     id: 4
 
-    神秘手提袋，交易后可以从牌堆中摸一张牌，当牌堆耗尽后，变为一张高脚杯。
+    神秘手提袋（高脚杯），交易后可以从牌堆中摸一张牌，当牌堆耗尽后，变为一张高脚杯。
     '''
     def __init__(self) -> None:
-        desc = '神秘手提袋，交易后可以从牌堆中摸一张牌，当牌堆耗尽后，变为一张高脚杯。'
+        desc = '神秘手提袋（高脚杯），交易后可以从牌堆中摸一张牌，当牌堆耗尽后，变为一张高脚杯。'
         super().__init__(4, CardTypes.HAND, desc)
     def __str__(self):
         return str(self.id) + ' ' + self.description
@@ -94,16 +97,16 @@ class KeyBag(Card):
     '''
     id: 5
 
-    神秘手提袋，交易后可以从牌堆中摸一张牌，当牌堆耗尽后，变为一张钥匙。
+    神秘手提袋（钥匙），交易后可以从牌堆中摸一张牌，当牌堆耗尽后，变为一张钥匙。
     '''
     def __init__(self) -> None:
-        desc = '神秘手提袋，交易后可以从牌堆中摸一张牌，当牌堆耗尽后，变为一张钥匙。'
+        desc = '神秘手提袋（钥匙），交易后可以从牌堆中摸一张牌，当牌堆耗尽后，变为一张钥匙。'
         super().__init__(5, CardTypes.HAND, desc)
     def __str__(self):
         return str(self.id) + ' ' + self.description
         
 
-class Knife(Card):
+class Dagge(Card):
     '''
     id: 6
 
@@ -128,7 +131,7 @@ class Tome(Card):
     def __str__(self):
         return str(self.id) + ' ' + self.description
 
-class Privileg(Card):
+class Privilege(Card):
     '''
     id: 8
 
@@ -180,7 +183,7 @@ class Coat(Card):
     def __str__(self):
         return str(self.id) + ' ' + self.description
 
-class Glass(Card):
+class Monocle(Card):
     '''
     id: 12
 
@@ -232,7 +235,7 @@ class Sextant(Card):
     def __str__(self):
         return str(self.id) + ' ' + self.description
 
-class RemoteKnife(Card):
+class CastingKnives(Card):
     '''
     id: 16
 
@@ -297,7 +300,7 @@ class Duelist(Card):
     def __str__(self):
         return str(self.id) + ' ' + self.description
 
-class Poisoner(Card):
+class PoisonMixer(Card):
     '''
     id: 21
 
@@ -310,7 +313,7 @@ class Poisoner(Card):
     def __str__(self):
         return str(self.id) + ' ' + self.description
 
-class KungfuMaster(Card):
+class GrandMaster(Card):
     '''
     id: 22
 
@@ -323,7 +326,7 @@ class KungfuMaster(Card):
     def __str__(self):
         return str(self.id) + ' ' + self.description
 
-class Xrayer(Card):
+class Clairvoyant(Card):
     '''
     id: 23
 
@@ -362,7 +365,7 @@ class Bodyguard(Card):
     def __str__(self):
         return str(self.id) + ' ' + self.description
 
-class Godfather(Card):
+class Priest(Card):
     '''
     id: 26
 
@@ -375,7 +378,7 @@ class Godfather(Card):
     def __str__(self):
         return str(self.id) + ' ' + self.description
 
-class Bully(Card):
+class Thug(Card):
     '''
     id: 27
 
@@ -387,8 +390,52 @@ class Bully(Card):
 
     def __str__(self):
         return str(self.id) + ' ' + self.description
-
-camp_cards = [RedCamp, BlueCamp]
-hand_cards = [
     
-]
+'''
+0-1:    camp
+2-17:   hand
+18-27:  profession
+
+'''
+itoc = {
+    0: RedCamp, 1: BlueCamp, 2: Goblet, 3: Key, 4: GobletBag, 5: KeyBag, 6: Dagge,
+    7: Tome, 8: Privilege, 9: PoisionRing, 10: Gloves, 11: Coat, 12: Monocle,
+    13: Whip, 14: BlackPearl, 15: Sextant, 16: CastingKnives, 17: BrokenMirror,
+    18: Diplomat, 19: Doctor, 20: Duelist, 21: PoisonMixer, 22: GrandMaster,
+    23: Clairvoyant, 24: Hypnotist, 25: Bodyguard, 26: Priest, 27: Thug
+}
+class HandHeap(list):
+
+    def __init__(self):
+        self.clear()
+        self.extend([itoc[2](), itoc[2](), itoc[2](), itoc[3](), itoc[3](), itoc[3]()])
+        for i in range(4, 18):
+            self.append(itoc[i]())
+        self.shuffle()
+
+    def shuffle(self):
+        random.shuffle(self)
+    def top(self):
+        return self.pop()
+    def empty(self) -> bool :
+        return len(self) == 0
+
+class ProfessionHeap(list):
+    def __init__(self):
+        self.clear()
+        for i in range(18, 28):
+            self.append(itoc[i]())
+        self.shuffle()
+
+    def shuffle(self):
+        random.shuffle(self)
+    def top(self):
+        return self.pop()
+    def empty(self) -> bool :
+        return len(self) == 0
+
+    
+if __name__ == "__main__":
+    c = ProfessionHeap()
+    for i in c :
+        print(i.name)
